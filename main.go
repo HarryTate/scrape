@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
 
 	"github.com/gocolly/colly"
 )
@@ -20,7 +22,20 @@ func crawl() {
 	})
 
 	c.OnHTML("body", func(e *colly.HTMLElement) {
-		heading := e.ChildText(".skill_title")
+		heading := e.ChildText(".hero-home__heading")
+		f, err := os.Create("data.txt")
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		_, err2 := f.WriteString(heading)
+
+		defer f.Close()
+
+		if err2 != nil {
+			log.Fatal(err2)
+		}
+
 		fmt.Println(heading)
 	})
 
